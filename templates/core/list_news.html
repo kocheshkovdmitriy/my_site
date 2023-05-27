@@ -7,6 +7,7 @@
         <p><a href="{% url 'core:detail_new' pk=new.pk %}">{{new}}</a></p>
         <p>{{new.description}}</p>
         <p>Опубликована: {{new.time_create}}</p>
+        <p>Коментариев: {{new.cnt_commit}}</p>
     {% empty %}
         <p>пока новостей нет</p>
     {% endfor %}

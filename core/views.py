@@ -1,8 +1,9 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 
 from core.models import New, Commit
+from core import forms
 
 
 def about(request):
@@ -36,7 +37,24 @@ class NewDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = context['object'].title
+        context['commits'] = Commit.objects.filter(new_id=context['object'].pk)
+        context['form'] = forms.CommitForm()
         return context
+
+    def post(self, request, **kwargs):
+        print(kwargs)
+        print(request.POST)
+        object = self.get_object()
+        print(object)
+        data = {'user_name': request.POST['user_name'],
+                'description': request.POST['description'],
+                'new': object}
+        if not request.user.is_anonymous:
+            data['user'] = request.user
+            data['user_name'] = request.user.first_name
+        Commit.objects.create(**data)
+        return redirect(reverse('core:detail_new', kwargs=kwargs))
+
 
 class NewCreate(TitleMixin, CreateView):
     model = New

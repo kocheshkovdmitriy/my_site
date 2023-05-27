@@ -7,12 +7,37 @@
         <div>
             <p>{{new.title}}</p>
             <p>{{new.description}}</p>
+            <p>Опубликована: {{new.time_create}}</p>
+            <p>Комментариев: {{new.cnt_commit}}</p>
+            {% for commit in commits%}
+                <p>Комментарий от: {{commit.user_name}}</p>
+                <p>{{commit.description}}</p>
+            {% endfor %}
         </div>
     {% else %}
         <div>
             <p>Что то пошло не так, вернитесь к новостям</p>
         </div>
     {% endif %}
+
+    <div id="create_commit">
+        <p>Оставить комментарий:</p>
+        <form method="post">
+            {% csrf_token %}
+            {% if request.user.is_anonymous %}
+                <div>
+                    {{ form.user_name.label }}
+                    {{ form.user_name }}
+                </div>
+            {% endif %}
+            <div>
+                {{ form.description.label }}
+                {{ form.description }}
+            </div>
+
+            <button type="submit">Сохранить комментарий</button>
+        </form>
+    </div>
 
     <div>
         {% if request.user.is_superuser %}
