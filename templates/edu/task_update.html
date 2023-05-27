@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Обновить</button>
+    <button type="reset">Сбросить изменения</button>
+</form>
+<form action="{% url 'edu:detail_task' pk=task.pk %}"><button type="submit">Отменить</button></form>
+{% endblock%}

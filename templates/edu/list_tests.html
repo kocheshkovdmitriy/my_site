@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content %}
+    {% if tests %}
+        {% for test in tests %}
+            <p><a href="{% url 'edu:detail_test' pk=test.pk %}">{{test}}</a></p>
+        {% endfor %}
+    {% else %}
+        список тестов пуст
+    {% endif %}
+    {% if request.user.is_superuser %}
+        <a href="{% url 'edu:test_create' %}">Добавить тест</a>
+    {% endif %}
+{% endblock %}
+
+{% block filters %}
+<form action="{% url 'edu:list_tests' %}" method="GET">
+    {% csrf_token %}
+    {{ filters.form.as_p }}
+    <button type="submit">Найти</button>
+</form>
+{% endblock %}

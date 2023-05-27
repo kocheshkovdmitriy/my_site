@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    {% load edu_tags %}
+    <h1>Создать тест:</h1>
+
+    <form method="post">
+      {% csrf_token %}
+        <p><label>Введите название теста:</label></p>
+        <p><input type="text" name="title" required ></p>
+        <p>Выберите задания. Слева можно отфильтровать задания по разделам.</p>
+        {% for task in tasks %}
+        <p><input type="checkbox" value="{{task.id}}" name="list_task_id" {% get_checked task.pk list_task_id %}>id задачи: {{task.pk}}</p>
+        <p>{{task.task}}</p>
+        {% empty %}
+          <p>По вашему запросу задач рне найдено. Провторите поиск</p>
+        {% endfor %}
+        {% if form_task %}
+            <p>Добавление задачи</p>
+            {{ form_task.as_p }}
+            <button type="submit" name="create_task" value="1">Сохранить задачу</button>
+        {% else %}
+            <button type="submit" name="add_task" value="1">добавить задачу</button>
+        {% endif %}
+      <button type="submit" name="create_test" value="1">Сохранить тест</button>
+    </form>
+    <form action="{% url 'edu:list_tests' %}"><button type="submit">К списку тестов</button></form>
+
+{% endblock%}
+
+{% block filters %}
+<p>Фильтр задач:</p>
+<form action="{% url 'edu:test_create' %}" method="GET">
+    {% csrf_token %}
+    {{ filters.form.as_p }}
+    <button type="submit">Найти</button>
+</form>
+{% endblock%}

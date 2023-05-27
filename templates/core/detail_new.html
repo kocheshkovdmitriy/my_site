@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    {% if new %}
+        <div>
+            <p>{{new.title}}</p>
+            <p>{{new.description}}</p>
+        </div>
+    {% else %}
+        <div>
+            <p>Что то пошло не так, вернитесь к новостям</p>
+        </div>
+    {% endif %}
+
+    <div>
+        {% if request.user.is_superuser %}
+        <a href="{% url 'core:new_update' pk=new.pk%}">Обновить новость</a>
+        <a href="{% url 'core:new_delete' pk=new.pk%}">Удалить новость</a>
+        {% endif %}
+        <a href="{% url 'core:list_news' %}">Назад к новостям</a>
+    </div>
+{% endblock%}

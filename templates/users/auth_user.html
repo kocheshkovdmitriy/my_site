@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+<h1>Авторизация пользователя {{profile.user.first_name}} {{profile.user.last_name}}</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+    <button type="reset">Очистить</button>
+</form>
+
+{% endblock%}

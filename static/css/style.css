@@ -1,0 +1,116 @@
+.main-content {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #20B2AA;
+  background-size: 100% 100%;
+  background-position: left center;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: gray;
+    min-width: 100%;
+    height: 50px;
+    background-size: 100% 100%;
+    background-position: left center;
+    }
+
+.group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group1 {
+    display: flex;
+    align-items: center;
+}
+.logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    }
+
+.group a{
+    margin-right: 25px;
+    }
+
+.main-content-element{
+    display: flex;
+}
+
+.left-panel{
+    min-width: 25vh;
+    max-width: 25vh;
+    background-color: #20B2AA;
+    min-height: 100vh;
+}
+
+.form_auth_block{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    z-index:998;
+    display: None;
+    width: 500px;
+    min-height: 500px;
+    margin: 0 auto;
+    background-size: 100% 100%;
+    border-radius: 6px;
+}
+.form_auth_block_content{
+  background-size: 100% 100%;
+  padding-top: 5%;
+}
+.form_auth_block_head_text{
+    display: block;
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    opacity: 0.7;
+}
+.form_auth_block label{
+    display: block;
+    text-align: center;
+    padding: 10px;
+    opacity: 0.7;
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.form_auth_block input{
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  height: 45px;
+  border-radius: 10px;
+  border:none;
+  outline: none;
+}
+input:focus {
+  color: #000000;
+  border-radius: 10px;
+  border: 2px solid #436fea;
+}
+.form_auth_button{
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 35px;
+    border: none;
+    cursor: pointer;
+}
+
+::-webkit-input-placeholder {color:#3f3f44; padding-left: 10px;} // Это стили для placeholder
+::-moz-placeholder          {color:#3f3f44; padding-left: 10px;} // Это стили для placeholder
+:-moz-placeholder           {color:#3f3f44; padding-left: 10px;} // Это стили для placeholder
+:-ms-input-placeholder      {color:#3f3f44; padding-left: 10px;} // Это стили для placeholder
+

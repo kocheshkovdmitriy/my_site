@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    {% if task %}
+        <div>
+            <p>id задачи: {{task.pk}}</p>
+            <p>раздел: {{task.section}}</p>
+            <p>условие: {{task.task}}</p>
+        </div>
+    {% else %}
+        <div>
+            <p>Что то пошло не так, вернитесь к списку задач</p>
+        </div>
+    {% endif %}
+
+    <div>
+        {% if request.user.is_superuser %}
+            <a href="{% url 'edu:task_update' pk=task.pk%}">Обновить задачу</a>
+            <a href="{% url 'edu:task_delete' pk=task.pk%}">Удалить задачу</a>
+        {% endif %}
+        <a href="{% url 'edu:list_tasks' %}">Назад к катологу заданий</a>
+    </div>
+{% endblock%}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    {% for task in tasks %}
+        <div>
+            <p><a href="{% url 'edu:detail_task' pk=task.pk %}">{{task}}</a></p>
+            <p>{{task.task}}</p>
+        </div>
+
+    {% empty %}
+        <p>список задач пуст</p>
+    {% endfor %}
+    {% if request.user.is_superuser %}
+        <a href="{% url 'edu:task_create' %}">Добавить задачу</a>
+    {% endif %}
+{% endblock%}
+
+{% block filters %}
+<form action="{% url 'edu:list_tasks' %}" method="GET">
+    {% csrf_token %}
+    {{ filters.form.as_p }}
+    <button type="submit">Найти</button>
+</form>
+{% endblock%}

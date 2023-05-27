@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <p>Вы действительно хотите удалить {{new}}</p>
+    <button type="submit">Удалить</button>
+</form>
+<form action="{% url 'core:list_news' %}"><button type="submit">Отменить</button></form>
+{% endblock%}

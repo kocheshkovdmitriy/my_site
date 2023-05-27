@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    {% for new in news %}
+        <p><a href="{% url 'core:detail_new' pk=new.pk %}">{{new}}</a></p>
+        <p>{{new.description}}</p>
+        <p>Опубликована: {{new.time_create}}</p>
+    {% empty %}
+        <p>пока новостей нет</p>
+    {% endfor %}
+
+    {% if request.user.is_superuser %}
+        <a href="{% url 'core:new_create' %}">Добавить новость</a>
+    {% endif %}
+
+{% endblock%}

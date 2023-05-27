@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <title>{% block title %}Заголовок страницы{% endblock%}</title>
+</head>
+<body>
+
+    <div class="main-content" style="background-image: url({% static 'image/back_base.jpg'%})";>
+        <nav class="menu">
+            <div class="group">
+                <img class="logo" src="{% static 'image/logo.png' %}" alt="Логотип">
+                <div class="group1">
+                    <a href="{% url 'core:list_news' %}">Главная</a>
+                    <a href="{% url 'core:about'%}">О себе</a>
+                    <a href="{% url 'edu:list_tests' %}">Список готовых тестов</a>
+                    <a href="{% url 'edu:list_tasks' %}">Каталог заданий</a>
+                    <a href="#">Обратная связь</a>
+                </div>
+            </div>
+            <div class="group">
+                {% if request.user.is_authenticated %}
+                    <p><a href="{% url 'users:profile' slug=request.user.username %}">{{ request.user.first_name }}</a> | <a href="{% url 'users:logout' %}">выйти</a></p>
+                {% else %}
+                    <p><a href="{% url 'users:register' %}">зарегистрироваться</a> | <a href="{% url 'users:login' %}">войти</a></p>
+                    <!--<p><button type="button" onclick="openForm('myForm1')">Регистрация</button> | <button type="button" onclick="openForm('myForm')">Войти</button> </p>-->
+                {% endif %}
+            </div>
+        </nav>
+        <div class="main-content-element">
+            <div class="left-panel">
+                {% block filters %}{% endblock%}
+            </div>
+            <div>
+            {% block content%}
+                Тут будет содержание страницы
+            {% endblock%}
+
+            </div>
+        </div>
+
+
+       <!--<div class="form_auth_block" id="myForm" style="background-image: url({% static 'image/logo.png'%})";>
+          <div class="form_auth_block_content">
+            <p class="form_auth_block_head_text">Авторизация</p>
+            <form class="form_auth_style" action="{% url 'users:login' %}" method="post">
+              {% csrf_token %}
+              <label>Введите имя пользователя</label>
+              <input type="text" name="username" placeholder="Введите имя пользователя" required >
+              <label>Введите пароль</label>
+              <input type="password" name="password" placeholder="Введите пароль" required >
+              <input type="hidden" name="lastpath" value="{{request.path}}">
+              <input type="hidden" name="name_form" value="auth_form">
+              <button class="form_auth_button" type="submit" name="form_auth">Войти</button>
+              <button class="form_auth_button" type="button" onclick="closeForm('myForm')">Отмена</button>
+            </form>
+          </div>
+        </div>
+       <div class="form_auth_block" id="myForm1" style="background-image: url({% static 'image/back_reg.jpg'%})";>
+          <div class="form_auth_block_content">
+            <p class="form_auth_block_head_text">Регистрация</p>
+            <form class="form_auth_style" action="{% url 'users:register' %}" method="post">
+              {% csrf_token %}
+              <label>Введите имя пользователя</label>
+              <input type="text" name="username" placeholder="Введите имя пользователя" required >
+              <label>Введите Ваше имя</label>
+              <input type="text" name="first_name" placeholder="Введите Ваше имя" required >
+              <label>Введите Вашу фамилию</label>
+              <input type="text" name="last_name" placeholder="Введите Вашу фамилию" required >
+              <label>Введите пароль</label>
+              <input type="password" name="password1" placeholder="Введите пароль" required >
+              <label>Повторите пароль</label>
+              <input type="password" name="password2" placeholder="Повторите пароль" required >
+              <label>Введите Ваш город</label>
+              <input type="text" name="city" placeholder="Введите Ваш город" required >
+              <label>Введите Вашу школу</label>
+              <input type="text" name="school" placeholder="Введите Вашу школу" required >
+              <label>Введите класс</label>
+              <input type="number" name="grade" placeholder="Введите класс" required >
+              <input type="hidden" name="lastpath" value="{{request.path}}">
+              <input type="hidden" name="name_form" value="reg_form">
+              <button class="form_auth_button" type="submit">Зарегистрироваться</button>
+              <button class="form_auth_button" type="button" onclick="closeForm('myForm1')">Отмена</button>
+            </form>
+          </div>
+        </div>
+       <script src="{% static 'js/auth_form.js' %}"></script>-->
+
+
+    </div>
+
+
+
+</body>
+</html>

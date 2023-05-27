@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    <h1>Профиль пользователя {{profile.user.first_name}} {{profile.user.last_name}}</h1>
+    <p>Город: {{profile.city}}</p>
+    <p>Школа: {{profile.school}}</p>
+    <p>Класс: {{profile.grade}}</p>
+    <div>
+        <ol>
+            <h4>Список тестов:</h4>
+            {% for test in profile.tests.all %}
+            <li><a href="{% url 'edu:detail_test' pk=test.pk %}">{{test}}</a></li>
+            {% endfor %}
+        </ol>
+    </div>
+    <a href="{% url 'users:profile_update' slug=profile.slug %}">Редактировать профиль</a>
+{% endblock%}
