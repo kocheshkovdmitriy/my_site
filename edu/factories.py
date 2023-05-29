@@ -11,6 +11,7 @@ class Section(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Section
 
+
 class Task(factory.django.DjangoModelFactory):
     task = factory_ru.text()
     answer = factory_ru.word()
