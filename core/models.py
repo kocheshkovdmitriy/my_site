@@ -24,7 +24,7 @@ class New(models.Model):
     time_update = models.DateTimeField(auto_now=True, verbose_name='Отредактированно')
 
     def cnt_commit(self):
-        return len(Commit.objects.filter(new=self))
+        return Commit.objects.filter(new=self).count()
 
     def __str__(self):
         return f'{self.title}'

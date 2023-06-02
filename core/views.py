@@ -42,11 +42,8 @@ class NewDetail(DetailView):
         return context
 
     def post(self, request, **kwargs):
-        print(kwargs)
-        print(request.POST)
         object = self.get_object()
-        print(object)
-        data = {'user_name': request.POST['user_name'],
+        data = {'user_name': request.POST.get('user_name', ''),
                 'description': request.POST['description'],
                 'new': object}
         if not request.user.is_anonymous:
@@ -69,6 +66,7 @@ class NewUpdate(TitleMixin, UpdateView):
     template_name = 'core/new_update.html'
     fields = '__all__'
     title = 'Редактирование новости'
+
     def get_success_url(self):
         return reverse_lazy("core:detail_new", kwargs={'pk': self.object.pk})
 

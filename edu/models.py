@@ -1,6 +1,6 @@
 from django.db import models
 
-
+from users.models import Profile
 
 
 class Task(models.Model):
@@ -48,6 +48,7 @@ class Answer(models.Model):
     answer = models.CharField(max_length=100, verbose_name='Ответ')
     task = models.ForeignKey('Task', on_delete=models.CASCADE, verbose_name='Задача', related_name='answers')
     test = models.ForeignKey('Test', on_delete=models.CASCADE, verbose_name='Тест', related_name='answers', blank=True, null=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='answers')
     status = models.BooleanField(verbose_name='статус', default=False)
 
     def __str__(self):
@@ -56,3 +57,26 @@ class Answer(models.Model):
             num=self.task.pk,
             status = 'решено' if self.status else 'нерешено'
         )
+
+    class Meta:
+        verbose_name = 'Ответ на задачу'
+        verbose_name_plural = 'Ответы на задачи'
+
+class TestAnswer(models.Model):
+    test = models.ForeignKey('Test', on_delete=models.CASCADE, verbose_name='Тест')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь')
+    status = models.IntegerField(verbose_name='статус')
+
+    def get_answers(self):
+        return Answer.objects.filter(test=self.test, user=self.user)
+
+    def __str__(self):
+        return '{user} Тест №{num}. Статус {status}%'.format(
+            user=self.user.first_name,
+            num=self.test.pk,
+            status = 'решено' if self.status else 'нерешено'
+        )
+
+    class Meta:
+        verbose_name = 'Ответ на тест'
+        verbose_name_plural = 'Ответы на тесты'

@@ -8,6 +8,7 @@
             <p>id задачи: {{task.pk}}</p>
             <p>раздел: {{task.section}}</p>
             <p>условие: {{task.task}}</p>
+            <p><a href="{% url 'edu:solved_task_detail' pk=task.pk%}">Решить задачу</a></p>
         </div>
     {% else %}
         <div>

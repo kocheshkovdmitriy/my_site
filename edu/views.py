@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
-from edu import models
-from edu import filters
-from edu import forms
+from django.views import generic
+
+from edu import models, filters, forms
+from edu.data_tools.save_answer import save_answer_task
+
+import users.models
 
 
 class TitleMixin():
@@ -18,7 +20,7 @@ class TitleMixin():
         return context
 
 
-class TestList(TitleMixin, ListView):
+class TestList(TitleMixin, generic.ListView):
     model = models.Test
     template_name = 'edu/list_tests.html'
     context_object_name = 'tests'
@@ -36,7 +38,7 @@ class TestList(TitleMixin, ListView):
         return context
 
 
-class TaskList(TitleMixin, ListView):
+class TaskList(TitleMixin, generic.ListView):
     model = models.Task
     template_name = 'edu/list_tasks.html'
     context_object_name = 'tasks'
@@ -54,7 +56,7 @@ class TaskList(TitleMixin, ListView):
         return context
 
 
-class TestDetail(DetailView):
+class TestDetail(generic.DetailView):
     model = models.Test
     template_name = 'edu/detail_test.html'
     context_object_name = 'test'
@@ -65,7 +67,7 @@ class TestDetail(DetailView):
         return context
 
 
-class TaskDetail(DetailView):
+class TaskDetail(generic.DetailView):
     model = models.Task
     template_name = 'edu/detail_task.html'
     context_object_name = 'task'
@@ -76,7 +78,7 @@ class TaskDetail(DetailView):
         return context
 
 
-class TaskCreate(CreateView):
+class TaskCreate(generic.CreateView):
     model = models.Task
     template_name = 'edu/task_create.html'
     fields = '__all__'
@@ -84,7 +86,7 @@ class TaskCreate(CreateView):
     success_url = reverse_lazy("edu:list_tasks")
 
 
-class TaskUpdate(TitleMixin, UpdateView):
+class TaskUpdate(TitleMixin, generic.UpdateView):
     model = models.Task
     template_name = 'edu/task_update.html'
     fields = '__all__'
@@ -94,14 +96,14 @@ class TaskUpdate(TitleMixin, UpdateView):
         return reverse_lazy("edu:detail_task", kwargs={'pk': self.object.pk})
 
 
-class TaskDelete(TitleMixin, DeleteView):
+class TaskDelete(TitleMixin, generic.DeleteView):
     model = models.Task
     template_name = 'edu/task_delete.html'
     title = 'Удаление задачи'
     success_url = reverse_lazy("edu:list_tasks")
 
 
-class TestCreateView(View):
+class TestCreateView(generic.View):
     def post(self, request):
         if request.POST.get('create_test'):
             list_task_id = dict(request.POST).get('list_task_id')
@@ -138,4 +140,29 @@ class TestCreateView(View):
                    'filters': self.get_filters(),
                    'title': 'Создание теста',
                    'list_task_id': dict(request.POST).get('list_task_id', [])}
+        return context
+
+
+class AnswerCreate(generic.View):
+    def get(self, request, pk):
+        context = self.get_context_data(pk)
+        return render(request, 'edu/solved_task_detail.html', context=context)
+
+    def post(self, request, pk):
+        if request.user.is_anonymous:
+            return render(request, 'edu/solved_task_detail.html')
+        if request.POST.get('answer'):
+            data = {'answer': request.POST['answer'],
+                    'task_id': pk,
+                    'user_id': users.models.Profile.objects.get(user=request.user).pk}
+            save_answer_task(**data)
+        context = self.get_context_data(pk)
+        context['form'] = forms.AnswerForm(request.POST)
+        return render(request, 'edu/solved_task_detail.html', context=context)
+
+    def get_context_data(self, pk):
+        context = {'task': models.Task.objects.filter(pk=pk).first(),
+                   'answer': models.Answer.objects.filter(task_id=pk),
+                   'form': forms.AnswerForm(),
+                   'title': f'решение задачи {pk}'}
         return context

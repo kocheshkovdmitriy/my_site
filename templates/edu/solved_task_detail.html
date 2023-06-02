@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %} {{title}} {% endblock%}
+
+{% block content%}
+    {% if request.user.is_anonymous %}
+        <div>
+            <p>Извините, решать задачи могут только авторизированные пользователи</p>
+            <p><a href="{% url 'users:register' %}">зарегистрироваться</a></p>
+            <p><a href="{% url 'users:login' %}">войти</a></p>
+            <p><a href="{% url 'edu:list_tasks' %}">Назад к катологу заданий</a></p>
+        </div>
+    {% else %}
+        {% if task %}
+            <div>
+                <p>id задачи: {{task.pk}}</p>
+                <p>раздел: {{task.section}}</p>
+                <p>условие: {{task.task}}</p>
+            </div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" >Сохранить решение</button>
+                </form>
+        {% else %}
+            <div>
+                <p>Что то пошло не так, вернитесь к списку задач</p>
+            </div>
+        {% endif %}
+
+        <div>
+            <a href="{% url 'edu:list_tasks' %}">Назад к катологу заданий</a>
+        </div>
+    {% endif %}
+{% endblock%}
