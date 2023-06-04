@@ -18,5 +18,5 @@ class ProfileFilter(django_filters.FilterSet):
         for name, value in self.form.cleaned_data.items():
             if value:
                 data[name] = value
-        queryset = queryset.filter(Q(_connector="OR", **data))
+        queryset = queryset.filter(Q(user__is_staff=False) & Q(_connector="OR", **data))
         return queryset

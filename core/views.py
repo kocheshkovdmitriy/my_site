@@ -93,9 +93,7 @@ class ListStudents(View):
 
     def get_context_data(self):
         cnt_tasks = edu.models.Task.objects.all().count()
-        context = {'students': self.get_queryset().filter(
-                user__is_staff=False
-            ).annotate(
+        context = {'students': self.get_queryset().annotate(
                 completed_tasks=Count(Case(When(answers__status=True, then=1))),
                 statistic_tasks=F('completed_tasks') * 100 / cnt_tasks,
                 completed_tests=Count(Case(When(testanswers__status=True, then=1)))
