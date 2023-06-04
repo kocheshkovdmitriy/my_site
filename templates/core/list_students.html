@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %} Список учеников {% endblock%}
+
+{% block content%}
+    {% for student in students %}
+        <p>{{ student }} {{ student.completed_tasks }} {{ student.completed_tests }}  {{student.statistic_tasks}}</p>
+    {% empty %}
+        <p>пока нет зарегистрированных пользователей</p>
+    {% endfor %}
+{% endblock%}

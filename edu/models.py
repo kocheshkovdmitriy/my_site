@@ -63,8 +63,8 @@ class Answer(models.Model):
         verbose_name_plural = 'Ответы на задачи'
 
 class TestAnswer(models.Model):
-    test = models.ForeignKey('Test', on_delete=models.CASCADE, verbose_name='Тест')
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь')
+    test = models.ForeignKey('Test', on_delete=models.CASCADE, verbose_name='Тест', related_name='testanswers')
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='testanswers')
     status = models.IntegerField(verbose_name='статус')
 
     def get_answers(self):

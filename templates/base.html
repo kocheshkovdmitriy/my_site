@@ -18,6 +18,9 @@
                     <a href="{% url 'core:about'%}">О себе</a>
                     <a href="{% url 'edu:list_tests' %}">Список готовых тестов</a>
                     <a href="{% url 'edu:list_tasks' %}">Каталог заданий</a>
+                    {% if request.user.is_staff %}
+                        <a href="{% url 'core:students' %}">Ученики</a>
+                    {% endif %}
                     <a href="#">Обратная связь</a>
                 </div>
             </div>

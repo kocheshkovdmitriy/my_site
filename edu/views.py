@@ -162,7 +162,7 @@ class AnswerCreate(generic.View):
 
     def get_context_data(self, pk):
         context = {'task': models.Task.objects.filter(pk=pk).first(),
-                   'answer': models.Answer.objects.filter(task_id=pk),
+                   'answer': models.Answer.objects.filter(task_id=pk).first(),
                    'form': forms.AnswerForm(),
                    'title': f'решение задачи {pk}'}
         return context
