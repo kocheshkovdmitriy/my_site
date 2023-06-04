@@ -1,3 +1,4 @@
+
 from django.contrib.auth.models import User
 from django.db.models import Count, Case, When, F
 from django.shortcuts import render, redirect
@@ -9,6 +10,7 @@ from core.models import New, Commit
 from core import forms
 
 import users.models
+import users.filters
 import edu.models
 
 
@@ -91,11 +93,19 @@ class ListStudents(View):
 
     def get_context_data(self):
         cnt_tasks = edu.models.Task.objects.all().count()
-        context = {'students': users.models.Profile.objects.filter(
-            user__in=User.objects.filter(is_staff=False)
-        ).annotate(
-            completed_tasks=Count(Case(When(answers__status=True, then=1))),
-            statistic_tasks=F('completed_tasks') * 100 / cnt_tasks,
-            completed_tests=Count(Case(When(testanswers__status=True, then=1)))
-        )}
+        context = {'students': self.get_queryset().filter(
+                user__is_staff=False
+            ).annotate(
+                completed_tasks=Count(Case(When(answers__status=True, then=1))),
+                statistic_tasks=F('completed_tasks') * 100 / cnt_tasks,
+                completed_tests=Count(Case(When(testanswers__status=True, then=1)))
+            ),
+            'filters': self.get_filters(),
+        }
         return context
+
+    def get_filters(self):
+        return users.filters.ProfileFilter(self.request.GET)
+
+    def get_queryset(self):
+        return self.get_filters().qs

@@ -3,9 +3,47 @@
 {% block title %} Список учеников {% endblock%}
 
 {% block content%}
-    {% for student in students %}
-        <p>{{ student }} {{ student.completed_tasks }} {{ student.completed_tests }}  {{student.statistic_tasks}}</p>
-    {% empty %}
-        <p>пока нет зарегистрированных пользователей</p>
-    {% endfor %}
+    <div>
+        <h1>Список учеников</h1>
+        <table class="table table-striped-columns">
+            <thead>
+                <tr class="table-success">
+                    <th>№</th>
+                    <th>Фамилия Имя</th>
+                    <th>Школа</th>
+                    <th>класс</th>
+                    <th>Кол-во решенных задач</th>
+                    <th>% решенных задач</th>
+                    <th>Кол-во назначенных тестов</th>
+                    <th>Кол-во решенных тестов</th>
+                </tr>
+            </thead>
+            <tbody class="table-active">
+                {% for student in students %}
+                    <tr>
+                        <th> {{ student.id }} </th>
+                        <th> {{ student }} </th>
+                        <th> {{ student.school }} </th>
+                        <th> {{ student.grade }} </th>
+                        <th> {{ student.completed_tasks }} </th>
+                        <th> {{student.statistic_tasks}} </th>
+                        <th> {{ student.tests.count }} </th>
+                        <th> {{ student.completed_tests }} </th>
+                    </tr>
+                {% empty %}
+                    <p>пока нет зарегистрированных пользователей</p>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 {% endblock%}
+
+
+{% block filters %}
+    <form action="{% url 'core:students' %}" method="GET">
+        {% csrf_token %}
+        {{ filters.form.as_p }}
+        <button type="submit">Найти</button>
+    </form>
+{% endblock %}

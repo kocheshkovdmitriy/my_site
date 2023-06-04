@@ -110,7 +110,6 @@ class TestCreateView(generic.View):
             if list_task_id:
                 new_test = models.Test.objects.create(title=request.POST["title"])
                 new_test.tasks_list.set(models.Task.objects.filter(pk__in=list_task_id))
-                print(new_test)
                 return redirect(reverse('edu:detail_test', kwargs={'pk': new_test.pk}))
         context = self.get_context_data(request)
         if request.POST.get('create_task'):
