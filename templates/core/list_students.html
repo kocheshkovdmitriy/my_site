@@ -22,7 +22,7 @@
                 {% for student in students %}
                     <tr>
                         <th> {{ student.id }} </th>
-                        <th> {{ student }} </th>
+                        <th> <a href="{% url 'users:profile' slug=student.slug %}">{{ student }}</a> </th>
                         <th> {{ student.school }} </th>
                         <th> {{ student.grade }} </th>
                         <th> {{ student.completed_tasks }} </th>

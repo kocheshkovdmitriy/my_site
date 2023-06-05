@@ -4,16 +4,34 @@
 
 {% block content%}
     <h1>Профиль пользователя {{profile.user.first_name}} {{profile.user.last_name}}</h1>
-    <p>Город: {{profile.city}}</p>
-    <p>Школа: {{profile.school}}</p>
-    <p>Класс: {{profile.grade}}</p>
-    <div>
-        <ol>
-            <h4>Список тестов:</h4>
-            {% for test in profile.tests.all %}
-            <li><a href="{% url 'edu:detail_test' pk=test.pk %}">{{test}}</a></li>
-            {% endfor %}
-        </ol>
+
+    <div style="display: flex;">
+        <div style="margin-right: 100px;">
+            <h4>Данные пользователя:</h4>
+            <p>Город: {{profile.city}}</p>
+            <p>Школа: {{profile.school}}</p>
+            <p>Класс: {{profile.grade}}</p>
+            <div>
+                <ol>
+                    <p>Количество назначенных тестов: {{ profile.tests.count }}</p>
+                    <h4>Список тестов:</h4>
+                    {% for test in profile.tests.all %}
+                    <li><a href="{% url 'edu:detail_test' pk=test.pk %}">{{test}}</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <div>
+            <h4>Статистика:</h4>
+            <p>Количество верно решенных задач: {{profile.completed_tasks}}</p>
+            <p>Количество неверно решенных задач: {{profile.wrong_tasks}}</p>
+            <p>Процент решенных задач: {{profile.statistic_tasks}}%</p>
+            <p>Кол-во решенных тестов: {{profile.completed_tests}}</p>
+        </div>
     </div>
-    <a href="{% url 'users:profile_update' slug=profile.slug %}">Редактировать профиль</a>
+
+    {% if request.user == profile.user %}
+        <a href="{% url 'users:profile_update' slug=profile.slug %}">Редактировать профиль</a>
+    {% endif %}
 {% endblock%}

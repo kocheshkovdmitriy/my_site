@@ -1,8 +1,11 @@
 from django.contrib.auth import login, authenticate, logout
+from django.db.models import Count, Case, When, F
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import UpdateView
-from users.models import Profile
+
+import edu.models
+from users import models
 from users.forms import RegisterForm, AuthUser
 
 from django.contrib.auth.models import User
@@ -10,9 +13,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 
 def profile(request, slug):
-    profile = get_object_or_404(Profile, slug=slug)
     context = {
-        'profile': profile,
+        'profile': models.Profile.objects.filter(slug=slug).annotate(
+                completed_tasks=Count(Case(When(answers__status=True, then=1))),
+                wrong_tasks=Count(Case(When(answers__status=False, then=1))),
+                statistic_tasks=F('completed_tasks') * 100 / edu.models.Task.objects.all().count(),
+                completed_tests=Count(Case(When(testanswers__status=True, then=1)))
+            ).first(),
         'title': profile.__str__()
     }
     return render(request, 'users/profile.html', context=context)
@@ -53,7 +60,7 @@ def register_view(request):
             city = form.cleaned_data.get('city')
             school = form.cleaned_data.get('school')
             grade = form.cleaned_data.get('grade')
-            Profile.objects.create(user=user, slug=slug, city=city, school=school, grade=grade)
+            models.Profile.objects.create(user=user, slug=slug, city=city, school=school, grade=grade)
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
@@ -68,9 +75,9 @@ def register_view(request):
         return render(request, 'users/reg_user.html', context=context)
 
 class ProfileUpdate(UpdateView):
-    model = Profile
+    model = models.Profile
     template_name = 'users/profile_update.html'
-    fields = ('city', 'school', 'grade', 'tests',)
+    fields = ('city', 'school', 'grade',)
     context_object_name = 'profile'
 
     def get_success_url(self):
