@@ -9,19 +9,17 @@ from users import models
 from users.forms import RegisterForm, AuthUser
 
 from django.contrib.auth.models import User
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 
 
 def profile(request, slug):
-    context = {
-        'profile': models.Profile.objects.filter(slug=slug).annotate(
+    profile = models.Profile.objects.filter(slug=slug).annotate(
                 completed_tasks=Count(Case(When(answers__status=True, then=1))),
                 wrong_tasks=Count(Case(When(answers__status=False, then=1))),
                 statistic_tasks=F('completed_tasks') * 100 / edu.models.Task.objects.all().count(),
                 completed_tests=Count(Case(When(testanswers__status=True, then=1)))
-            ).first(),
-        'title': profile.__str__()
-    }
+            ).first()
+    context = {'profile': profile, 'title': profile.__str__()}
     return render(request, 'users/profile.html', context=context)
 
 def logout_view(request):

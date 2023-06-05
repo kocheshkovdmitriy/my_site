@@ -10,7 +10,11 @@
             <p>Опубликована: {{new.time_create}}</p>
             <p>Комментариев: {{new.cnt_commit}}</p>
             {% for commit in commits%}
-                <p>Комментарий от: {{commit.user_name}}</p>
+                {% if commit.user %}
+                    <p>Комментарий от: <a href="{% url 'users:profile' slug=commit.user.username %}">{{ commit.user_name }}</a></p>
+                {% else %}
+                    <p>Комментарий от: {{commit.user_name}}</p>
+                {% endif %}
                 <p>{{commit.description}}</p>
             {% endfor %}
         </div>

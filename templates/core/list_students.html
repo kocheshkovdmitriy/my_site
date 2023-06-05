@@ -16,6 +16,7 @@
                     <th>% решенных задач</th>
                     <th>Кол-во назначенных тестов</th>
                     <th>Кол-во решенных тестов</th>
+                    <th>Последнее посещение</th>
                 </tr>
             </thead>
             <tbody class="table-active">
@@ -29,6 +30,7 @@
                         <th> {{student.statistic_tasks}} </th>
                         <th> {{ student.tests.count }} </th>
                         <th> {{ student.completed_tests }} </th>
+                        <th> {{ student.user.last_login }} </th>
                     </tr>
                 {% empty %}
                     <p>пока нет зарегистрированных пользователей</p>
@@ -41,6 +43,7 @@
 
 
 {% block filters %}
+    <p>Поиск учеников:</p>
     <form action="{% url 'core:students' %}" method="GET">
         {% csrf_token %}
         {{ filters.form.as_p }}

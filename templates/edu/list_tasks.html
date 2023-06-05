@@ -7,6 +7,7 @@
         <div>
             <p><a href="{% url 'edu:detail_task' pk=task.pk %}">{{task}}</a></p>
             <p>{{task.task}}</p>
+            <p><a href="{% url 'edu:solved_task_detail' pk=task.pk%}">Решить задачу</a></p>
         </div>
 
     {% empty %}

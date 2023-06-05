@@ -7,6 +7,8 @@ class TaskFilter(django_filters.FilterSet):
         fields = ('section_id',)
 
 class TestFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(label="Тема теста", lookup_expr='icontains')
+
     class Meta:
         model = models.Test
         fields = ('title',)
