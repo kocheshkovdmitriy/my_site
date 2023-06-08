@@ -1,5 +1,5 @@
 from django.contrib.auth import login, authenticate, logout
-from django.db.models import Count, Case, When, F
+from django.db.models import Count, Case, When, F, Q
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import UpdateView
@@ -14,10 +14,9 @@ from django.shortcuts import render, redirect
 
 def profile(request, slug):
     profile = models.Profile.objects.filter(slug=slug).annotate(
-                completed_tasks=Count(Case(When(answers__status=True, then=1))),
-                wrong_tasks=Count(Case(When(answers__status=False, then=1))),
-                statistic_tasks=F('completed_tasks') * 100 / edu.models.Task.objects.all().count(),
-                completed_tests=Count(Case(When(testanswers__status=True, then=1)))
+                completed_tasks=Count(Case(When(answers__test__isnull=True, answers__status=True, then=1))),
+                wrong_tasks=Count(Case(When(answers__test__isnull=True,  answers__status=False, then=1))),
+                statistic_tasks=F('completed_tasks') * 100 / edu.models.Task.objects.all().count()
             ).first()
     context = {'profile': profile, 'title': profile.__str__()}
     return render(request, 'users/profile.html', context=context)

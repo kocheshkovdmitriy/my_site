@@ -21,7 +21,7 @@ class Task(models.Model):
 
 class Test(models.Model):
     title = models.CharField(max_length=100, verbose_name='Тема теста')
-    tasks_list = models.ManyToManyField('Task', related_name='tasks')
+    tasks_list = models.ManyToManyField('Task', related_name='test')
 
     def __str__(self):
         return 'Тема: {title}, количесво задани {cnt_task}'.format(
@@ -72,7 +72,7 @@ class TestAnswer(models.Model):
 
     def __str__(self):
         return '{user} Тест №{num}. Статус {status}%'.format(
-            user=self.user.first_name,
+            user=self.user.user.first_name,
             num=self.test.pk,
             status = self.status
         )
