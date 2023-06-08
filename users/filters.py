@@ -6,6 +6,7 @@ from users import models
 
 class ProfileFilter(django_filters.FilterSet):
     user__first_name__icontains = django_filters.CharFilter(label='Имя')
+    user__last_name__icontains = django_filters.CharFilter(label='Фамилия')
     school__icontains = django_filters.CharFilter(label='Школа')
     grade = django_filters.NumberFilter(label='Класс')
 

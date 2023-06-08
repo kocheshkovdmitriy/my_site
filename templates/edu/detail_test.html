@@ -4,6 +4,7 @@
 
 {% block content%}
     {% if test %}
+        <h2>{{ test.title }}</h2>
         {% for task in test.tasks_list.all %}
             <div>
                 <p>id задачи: {{task.pk}}</p>
@@ -20,6 +21,7 @@
             <a href="#">Обновить тест</a>
             <a href="#">Удалить тест</a>
         {% endif %}
+        <a href="{% url 'edu:solved_test' pk=test.pk%}">Решить тест</a>
         <a href="{% url 'edu:list_tests' %}">Назад к списку тестов</a>
     </div>
 {% endblock%}

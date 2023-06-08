@@ -29,7 +29,7 @@ def logout_view(request):
 class LoginView(View):
     def get(self, request):
         form = AuthUser()
-        context = {'form': form}
+        context = {'form': form, 'title': 'авторизация пользователя'}
         return render(request, 'users/auth_user.html', context=context)
 
     def post(self, request):

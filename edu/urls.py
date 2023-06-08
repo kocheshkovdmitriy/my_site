@@ -17,4 +17,5 @@ urlpatterns = [
     path('task_delete/<int:pk>', views.TaskDelete.as_view(), name='task_delete'),
 
     path('solved_task_detail/<int:pk>', views.AnswerCreate.as_view(), name='solved_task_detail'),
+    path('solved_test/<int:pk>', views.AnswerTestCreate.as_view(), name='solved_test'),
 ]

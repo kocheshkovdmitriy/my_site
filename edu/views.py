@@ -3,7 +3,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from edu import models, filters, forms
-from edu.data_tools.save_answer import save_answer_task
+from edu.data_tools.save_answer import save_answer_task, save_answer_test
 
 import users.models
 
@@ -165,3 +165,24 @@ class AnswerCreate(generic.View):
                    'form': forms.AnswerForm(),
                    'title': f'решение задачи {pk}'}
         return context
+
+
+class AnswerTestCreate(generic.View):
+    def get(self, request, pk):
+        context = self.get_context_data(pk)
+        return render(request, 'edu/solved_test.html', context=context)
+
+    def post(self, request, pk):
+        if request.user.is_anonymous:
+            return render(request, 'edu/solved_task_detail.html')
+        data_form = {int(key): request.POST[key] for key in request.POST if key.isdigit()}
+        save_answer_test(data=data_form, user_id=users.models.Profile.objects.get(user=request.user).pk, test_id=pk)
+        context = self.get_context_data(pk)
+        return render(request, 'edu/solved_test.html', context=context)
+
+    def get_context_data(self, pk):
+        test = models.Test.objects.filter(pk=pk).first()
+        context = {'list_tasks': test.tasks_list.all(),
+                   'title': test.title}
+        return context
+

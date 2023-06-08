@@ -74,7 +74,7 @@ class TestAnswer(models.Model):
         return '{user} Тест №{num}. Статус {status}%'.format(
             user=self.user.first_name,
             num=self.test.pk,
-            status = 'решено' if self.status else 'нерешено'
+            status = self.status
         )
 
     class Meta:
